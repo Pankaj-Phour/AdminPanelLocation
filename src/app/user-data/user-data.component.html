@@ -1,0 +1,24 @@
+<div class="body">
+    <div class="container">
+        <div class="navbar">
+                    <form [formGroup]="search">
+                    <input placeholder="Search user" type="text" formControlName="name" (input)="input($event.target)">
+                </form>
+        </div>
+        <div class="data">
+            <div class="card" *ngFor="let card of data;let i = index" (click)="map(i)">
+               <!-- <div class="cardImage">
+                <img [src]="'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1206.jpg'" width="auto" height="auto">
+               </div> -->
+               <div class="name">{{card.name}}</div>
+               <div class="detail">
+                   <p>Latitude : </p><p>{{card.latitude}}</p>
+                </div>
+                <div class="detail">
+                   <p>Longitude : </p><p>{{card.longitude}}</p>
+               </div>
+            </div>
+        </div>
+        <div class="data" *ngIf="noData">No Data Found</div>
+    </div>
+</div>
