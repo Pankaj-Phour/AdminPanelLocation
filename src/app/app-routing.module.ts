@@ -11,7 +11,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  // Added Hashrouting to navigate smoothly on different pages on server on january 23 2023 
+  imports: [RouterModule.forRoot(routes,{useHash:true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
