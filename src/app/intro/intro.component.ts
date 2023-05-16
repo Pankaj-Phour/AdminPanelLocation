@@ -43,7 +43,7 @@ export class IntroComponent implements OnInit {
         console.log("Invalid user");
         
       }else{
-
+        localStorage.setItem('logged_in','true')
         this.router.navigate(['/dashboard'])
       }
     }
