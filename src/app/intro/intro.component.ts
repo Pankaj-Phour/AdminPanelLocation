@@ -39,11 +39,11 @@ export class IntroComponent implements OnInit {
       this.Submit = false;
     },2000)
     if(this.Login.valid){
-      if(this.Login.value.email !== 'pankaj.phour70@gmail.com' && this.Login.value.password !== 'Pankaj@123'){
+      if(this.Login.value.email !== 'pankaj.phour70@gmail.com' || this.Login.value.password !== 'Pankaj@123'){
         console.log("Invalid user");
         
       }else{
-
+        localStorage.setItem('logged_in','true')
         this.router.navigate(['/dashboard'])
       }
     }
