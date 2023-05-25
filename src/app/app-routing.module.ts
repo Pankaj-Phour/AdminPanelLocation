@@ -6,25 +6,29 @@ import { UserDataComponent } from './user-data/user-data.component';
 import { AuthGuard } from './services/auth.guard';
 
 const routes: Routes = [
-  {path:'', 
-  component:IntroComponent
-},
-  {path:'dashboard', 
-  component:UserDataComponent,
-  canActivate : [AuthGuard]
-},
-  {path:'map',
-   component:MapComponent,
-   canActivate : [AuthGuard]
+  {
+    path: '',
+    component: IntroComponent
   },
-  {path:'**',
-   redirectTo : '',
+  {
+    path: 'dashboard',
+    component: UserDataComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'map',
+    component: MapComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
 
 @NgModule({
   // Added Hashrouting to navigate smoothly on different pages on server on january 23 2023 
-  imports: [RouterModule.forRoot(routes,{useHash:true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
