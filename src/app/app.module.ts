@@ -8,13 +8,17 @@ import { UserDataComponent } from './user-data/user-data.component';
 import { MapComponent } from './map/map.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NotificationComponent } from './notification/notification.component';
+import { NotifyComponent } from './notify/notify.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     IntroComponent,
     UserDataComponent,
-    MapComponent
+    MapComponent,
+    NotificationComponent,
+    NotifyComponent
   ],
   imports: [
     BrowserModule,

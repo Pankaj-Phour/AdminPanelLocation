@@ -21,16 +21,23 @@ export class IntroComponent implements OnInit {
     localStorage.setItem('selected','login');
     this.validation()
   }
+
+// Function for testing  purpose only 
   Log(e:any){
     console.log("Welcome to Login " + e);
 
   }
+
+// Function to set validation of the form 
   validation(){
     this.Login = this.fb.group({
       email: new FormControl('',Validators.compose([Validators.required,Validators.email])),
       password: new FormControl('',Validators.required)
     })
   }
+
+
+  // Function hits when user submits his/her details 
   submit(){
     
     localStorage.setItem('submit','true');
@@ -49,6 +56,8 @@ export class IntroComponent implements OnInit {
     }
   }
 
+
+  // This function was just for testing purpose of the concept setValue and patchValue 
   new(){
     this.form= new FormGroup({
       age : new FormControl ('',Validators.required),
