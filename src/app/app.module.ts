@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NotificationComponent } from './notification/notification.component';
 import { NotifyComponent } from './notify/notify.component';
+import { GoogleLoginProvider, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,25 @@ import { NotifyComponent } from './notify/notify.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '323821630968-n6recgjk8de95rthp0o14lg7a535uqes.apps.googleusercontent.com'
+            )
+          }
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
