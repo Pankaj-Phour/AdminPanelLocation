@@ -20,23 +20,18 @@ export class IntroComponent implements OnInit {
 
 
     googleLogin(){
-      // console.log("Hello from login function ");
       this.authService.authState.subscribe((user) => {
         // this.user = user;
         // this.loggedIn = (user != null);
         // console.log("Checking data of the user",user);
         localStorage.setItem('logged_in','true')
         this.Login.get('email').setValue(user.email);
-        // this.Login.get('password').setValue(user.name);
-        // console.log(this.nameForm);
-        this.submit();
-        
-  
-        // this.router.navigate(['/dashboard']);
+        this.router.navigate(['/dashboard'])
       });
     }
 
   ngOnInit(): void {
+    this.googleLogin();
     this.new();
     localStorage.setItem('selected','login');
     this.validation()
