@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NotificationComponent } from './notification/notification.component';
 import { NotifyComponent } from './notify/notify.component';
-import { GoogleLoginProvider, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,8 @@ import { GoogleLoginProvider, SocialAuthServiceConfig } from '@abacritt/angularx
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    SocialLoginModule
   ],
   providers: [
     {
