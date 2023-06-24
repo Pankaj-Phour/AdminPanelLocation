@@ -14,7 +14,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 This is a simple webpage in which we get latitude and longitude coordinates of user and then later display them on the map. We are using openstreetMap and leaflet in this project.
 
 1. Author : Pankaj Phour(https://github.com/Pankaj-Phour)
-2. Project : Admin panel of user videos
+2. Project : Admin panel of user Locations
 3. FrameWork used : Angular vesion 14.0.1
 4. Backend : NodeJs
 5. API Base Url : https://locationapi.onrender.com
