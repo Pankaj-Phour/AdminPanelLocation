@@ -10,9 +10,11 @@ import { Router } from '@angular/router';
 })
 export class IntroComponent implements OnInit {
 
-  Login:FormGroup;
+  passwordLogin:FormGroup;
   Submit:boolean  =false;
   form:FormGroup;
+  otpLogin:FormGroup;
+  forgotPassword:boolean = false;
   constructor(private router:Router,
     private fb:FormBuilder,
     private authService:SocialAuthService
@@ -25,8 +27,8 @@ export class IntroComponent implements OnInit {
         // this.loggedIn = (user != null);
         // console.log("Checking data of the user",user);
         localStorage.setItem('logged_in','true')
-        this.Login.get('email').setValue(user.email);
-        this.router.navigate(['/dashboard'])
+       this.forgotPassword ? this.otpLogin.get('email').setValue(user.email) : this.passwordLogin.get('email').setValue(user.email);
+        // this.router.navigate(['/dashboard'])
       });
     }
 
@@ -43,11 +45,20 @@ export class IntroComponent implements OnInit {
 
   }
 
-// Function to set validation of the form 
+// Function to set validation of the password login form 
   validation(){
-    this.Login = this.fb.group({
+    this.passwordLogin = this.fb.group({
       email: new FormControl('',Validators.compose([Validators.required,Validators.email])),
       password: new FormControl('',Validators.required)
+    })
+  }
+
+
+// Function to set validation of the otp login form 
+  validation2(){
+    this.otpLogin = this.fb.group({
+      email: new FormControl('',Validators.compose([Validators.required,Validators.email])),
+      otp: new FormControl('',Validators.required)
     })
   }
 
@@ -60,8 +71,8 @@ export class IntroComponent implements OnInit {
     setTimeout(()=>{
       this.Submit = false;
     },2000)
-    if(this.Login.valid){
-      if(this.Login.value.email !== 'pankaj.phour70@gmail.com' || this.Login.value.password !== 'Pankaj@123'){
+    if(this.passwordLogin.valid){
+      if(this.passwordLogin.value.email !== 'pankaj.phour70@gmail.com' || this.passwordLogin.value.password !== 'Pankaj@123'){
         console.log("Invalid user");
         
       }else{
@@ -95,5 +106,9 @@ export class IntroComponent implements OnInit {
     
     this.form.patchValue(obj2)
     console.log(this.form);
+  }
+
+  loginChange(){
+    this.forgotPassword = !this.forgotPassword;
   }
 }
