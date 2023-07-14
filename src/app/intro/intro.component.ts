@@ -2,6 +2,7 @@ import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-intro',
@@ -15,9 +16,13 @@ export class IntroComponent implements OnInit {
   form:FormGroup;
   otpLogin:FormGroup;
   forgotPassword:boolean = false;
+  emailSubmit:boolean = false;
+  invalidOtp:boolean = false;
+  otpSubmit:boolean = false;
   constructor(private router:Router,
     private fb:FormBuilder,
-    private authService:SocialAuthService
+    private authService:SocialAuthService,
+    private _api:ApiService
     ) { }
 
 
@@ -111,4 +116,59 @@ export class IntroComponent implements OnInit {
   loginChange(){
     this.forgotPassword = !this.forgotPassword;
   }
+
+
+  onOtpChange(e: any) {
+    if (e.length > 3) {
+      const params = {
+        otp: +e,
+        email : localStorage.getItem('user-email')
+      }
+      this._api.otpChecker('/otpChecker', params).subscribe((next: any) => {
+        if(next && !next.error){
+
+          this.invalidOtp = false;
+          setTimeout(() => {
+            this.emailSubmit = false;
+            // this._api.obNotify({
+            //   start: true,
+            //   code: 200,
+            //   status: 'success',
+            //   message: next.message
+            // })
+            localStorage.setItem('user',JSON.stringify(next.response))
+            this.router.navigate(['/dashboard']);
+          }, 2000);
+        }
+        else{
+          this.otpSubmit = true;
+          this.invalidOtp = true;
+          setTimeout(() => {
+            this.otpSubmit = false;
+            // this._api.obNotify({
+            //   start: true,
+            //   code: 200,
+            //   status: 'error',
+            //   message: next.message
+            // })
+          }, 2000);
+          console.log("Invalid OTP");
+          
+        }
+      })
+    }
+    else {
+      this.invalidOtp = true;
+    }
+  }
+
+  keyValue(e: any) {
+    if (((e.keyCode >= 96 && e.keyCode <= 105) || (e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode === 8)) {
+      // DO NOTHING 
+    }
+    else {
+      e.preventDefault();
+    }
+  }
+
 }
