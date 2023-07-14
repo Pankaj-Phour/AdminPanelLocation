@@ -31,27 +31,25 @@
 
         <div class="form" *ngIf="forgotPassword">
             <form [formGroup]="otpLogin">
-                <div class="formgroup">
+                <div class="formgroup" *ngIf="!emailSubmit">
                 <label for="email">
                     Email 
                 </label>
                 <input type="email" placeholder="Enter your email" formControlName="email" autocomplete="true">
-                <div class="error" *ngIf="otpLogin.get('email').hasError('required') && (Submit)">Please enter your Email Id</div>
-                <div class="error" *ngIf="otpLogin.get('email').hasError('email') && (Submit)">Please enter valid Email Id</div>
-                <div class="error" *ngIf="!otpLogin.get('email').hasError('required') && !otpLogin.get('email').hasError('email') && otpLogin.get('email').value !== 'pankaj.phour70@gmail.com' && (Submit)">Wrong Email Id</div>
-
+                <div class="error" *ngIf="otpLogin.get('email').hasError('required') && otpLogin.get('email').touched">Please enter your Email Id</div>
+                <div class="error" *ngIf="otpLogin.get('email').hasError('email') && otpLogin.get('email').touched">Please enter valid Email Id</div>
+                <div class="error" *ngIf="!otpLogin.get('email').hasError('required') && !otpLogin.get('email').hasError('email') && otpLogin.get('email').value !== 'pankaj.phour70@gmail.com'">Wrong Email Id</div>
             </div>
-            <div class="formGroup" >
-                <ng-otp-input formnControlName="otp" [config]="{length:4}"
+            <div class="formGroup" *ngIf="emailSubmit">
+                <ng-otp-input formControlName="otp" [config]="{length:4}"
                                         (keydown)="keyValue($event)"
                                         (onInputChange)="onOtpChange($event)"></ng-otp-input>
             </div>
             <div class="button">
                 <div class="forgot" (click)="loginChange()">Login with Password ?</div>
                 <asl-google-signin-button #google (click)="googleLogin()"></asl-google-signin-button>
-                <button type="button" class="btn" (click)="emailSubmitFunction()">Submit</button>
+                <button type="button" class="btn" (click)="emailSubmitFunction()" [disabled]="otpLogin.get('email').hasError('required') || otpLogin.get('email').hasError('email') || (!otpLogin.get('email').hasError('required') && !otpLogin.get('email').hasError('email') && otpLogin.get('email').value !== 'pankaj.phour70@gmail.com')">Submit</button>
             </div>
-
             </form>
         </div>
 
