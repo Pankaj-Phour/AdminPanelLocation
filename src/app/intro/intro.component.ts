@@ -41,7 +41,8 @@ export class IntroComponent implements OnInit {
     this.googleLogin();
     this.new();
     localStorage.setItem('selected','login');
-    this.validation()
+    this.validation();
+    this.validation2();
   }
 
 // Function for testing  purpose only 
@@ -87,6 +88,10 @@ export class IntroComponent implements OnInit {
     }
   }
 
+  emailSubmitFunction(){
+    this.emailSubmit = true;
+  }
+
 
   // This function was just for testing purpose of the concept setValue and patchValue 
   new(){
@@ -130,12 +135,12 @@ export class IntroComponent implements OnInit {
           this.invalidOtp = false;
           setTimeout(() => {
             this.emailSubmit = false;
-            // this._api.obNotify({
-            //   start: true,
-            //   code: 200,
-            //   status: 'success',
-            //   message: next.message
-            // })
+            this._api.obNotify({
+              start: true,
+              code: 200,
+              status: 'success',
+              message: next.message
+            })
             localStorage.setItem('user',JSON.stringify(next.response))
             this.router.navigate(['/dashboard']);
           }, 2000);
@@ -145,12 +150,12 @@ export class IntroComponent implements OnInit {
           this.invalidOtp = true;
           setTimeout(() => {
             this.otpSubmit = false;
-            // this._api.obNotify({
-            //   start: true,
-            //   code: 200,
-            //   status: 'error',
-            //   message: next.message
-            // })
+            this._api.obNotify({
+              start: true,
+              code: 200,
+              status: 'error',
+              message: next.message
+            })
           }, 2000);
           console.log("Invalid OTP");
           
