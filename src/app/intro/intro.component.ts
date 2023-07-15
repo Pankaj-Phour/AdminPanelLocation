@@ -2,6 +2,7 @@ import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-intro',
@@ -10,12 +11,18 @@ import { Router } from '@angular/router';
 })
 export class IntroComponent implements OnInit {
 
-  Login:FormGroup;
+  passwordLogin:FormGroup;
   Submit:boolean  =false;
   form:FormGroup;
+  otpLogin:FormGroup;
+  forgotPassword:boolean = false;
+  emailSubmit:boolean = false;
+  invalidOtp:boolean = false;
+  otpSubmit:boolean = false;
   constructor(private router:Router,
     private fb:FormBuilder,
-    private authService:SocialAuthService
+    private authService:SocialAuthService,
+    private _api:ApiService
     ) { }
 
 
@@ -25,8 +32,8 @@ export class IntroComponent implements OnInit {
         // this.loggedIn = (user != null);
         // console.log("Checking data of the user",user);
         localStorage.setItem('logged_in','true')
-        this.Login.get('email').setValue(user.email);
-        this.router.navigate(['/dashboard'])
+       this.forgotPassword ? this.otpLogin.get('email').setValue(user.email) : this.passwordLogin.get('email').setValue(user.email);
+        // this.router.navigate(['/dashboard'])
       });
     }
 
@@ -34,7 +41,8 @@ export class IntroComponent implements OnInit {
     this.googleLogin();
     this.new();
     localStorage.setItem('selected','login');
-    this.validation()
+    this.validation();
+    this.validation2();
   }
 
 // Function for testing  purpose only 
@@ -43,11 +51,20 @@ export class IntroComponent implements OnInit {
 
   }
 
-// Function to set validation of the form 
+// Function to set validation of the password login form 
   validation(){
-    this.Login = this.fb.group({
+    this.passwordLogin = this.fb.group({
       email: new FormControl('',Validators.compose([Validators.required,Validators.email])),
       password: new FormControl('',Validators.required)
+    })
+  }
+
+
+// Function to set validation of the otp login form 
+  validation2(){
+    this.otpLogin = this.fb.group({
+      email: new FormControl('',Validators.compose([Validators.required,Validators.email])),
+      otp: new FormControl('',Validators.required)
     })
   }
 
@@ -60,8 +77,8 @@ export class IntroComponent implements OnInit {
     setTimeout(()=>{
       this.Submit = false;
     },2000)
-    if(this.Login.valid){
-      if(this.Login.value.email !== 'pankaj.phour70@gmail.com' || this.Login.value.password !== 'Pankaj@123'){
+    if(this.passwordLogin.valid){
+      if(this.passwordLogin.value.email !== 'pankaj.phour70@gmail.com' || this.passwordLogin.value.password !== 'Pankaj@123'){
         console.log("Invalid user");
         
       }else{
@@ -69,6 +86,10 @@ export class IntroComponent implements OnInit {
         this.router.navigate(['/dashboard'])
       }
     }
+  }
+
+  emailSubmitFunction(){
+    this.emailSubmit = true;
   }
 
 
@@ -96,4 +117,63 @@ export class IntroComponent implements OnInit {
     this.form.patchValue(obj2)
     console.log(this.form);
   }
+
+  loginChange(){
+    this.forgotPassword = !this.forgotPassword;
+  }
+
+
+  onOtpChange(e: any) {
+    if (e.length > 3) {
+      const params = {
+        otp: +e,
+        email : localStorage.getItem('user-email')
+      }
+      this._api.otpChecker('/otpChecker', params).subscribe((next: any) => {
+        if(next && !next.error){
+
+          this.invalidOtp = false;
+          setTimeout(() => {
+            this.emailSubmit = false;
+            this._api.obNotify({
+              start: true,
+              code: 200,
+              status: 'success',
+              message: next.message
+            })
+            localStorage.setItem('user',JSON.stringify(next.response))
+            this.router.navigate(['/dashboard']);
+          }, 2000);
+        }
+        else{
+          this.otpSubmit = true;
+          this.invalidOtp = true;
+          setTimeout(() => {
+            this.otpSubmit = false;
+            this._api.obNotify({
+              start: true,
+              code: 200,
+              status: 'error',
+              message: next.message
+            })
+          }, 2000);
+          console.log("Invalid OTP");
+          
+        }
+      })
+    }
+    else {
+      this.invalidOtp = true;
+    }
+  }
+
+  keyValue(e: any) {
+    if (((e.keyCode >= 96 && e.keyCode <= 105) || (e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode === 8)) {
+      // DO NOTHING 
+    }
+    else {
+      e.preventDefault();
+    }
+  }
+
 }
